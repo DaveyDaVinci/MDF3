@@ -19,10 +19,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
+import android.text.Editable;
+import android.text.InputFilter.LengthFilter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import connectionwork.ConnectionWork;
@@ -33,6 +36,8 @@ public class LauncherActivity extends Activity {
 	static Context context;
 	static TextView testText;
 	static boolean connection;
+	static EditText numberBox;
+	static String enteredString;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,20 +48,9 @@ public class LauncherActivity extends Activity {
 		
 		testText = (TextView) findViewById(R.id.testText);
 		
-		connection = ConnectionWork.getStatusOfConnection(context);
-				
-		if (connection == true)
-		{
-			Log.i("Connection test", "Working");
-			
-			getxkcdComic();
-		}
-		else 
-		{
-			
-			
-			
-		}
+		numberBox = (EditText) findViewById(R.id.numberBox);
+		
+		
 		
 		Button launchButton = (Button) findViewById(R.id.launchButton);
 		
@@ -64,24 +58,33 @@ public class LauncherActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Intent secondApp = new Intent(Intent.ACTION_MAIN);
-				secondApp.addCategory(Intent.CATEGORY_LAUNCHER);
-				secondApp.setComponent(new ComponentName("com.fullsail.magee_david_secondproject", 
-						"com.fullsail.magee_david_secondproject.LaunchedActivity"));
-				secondApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				PackageManager theManager = getPackageManager();
-				List<ResolveInfo> activities = theManager.queryIntentActivities(secondApp, 0);
-				
-				startActivity(secondApp);
 				
 				
-				boolean isIntentSafe = activities.size() > 0;
 				
-				if (isIntentSafe)
+				connection = ConnectionWork.getStatusOfConnection(context);
+				
+				if (connection == true)
 				{
-					startActivity(secondApp);
+					enteredString = numberBox.getText().toString();
+					
+					if (enteredString != null && !enteredString.isEmpty())
+					{
+						getxkcdComic(enteredString);
+					}
+					else 
+					{
+						testText.setText("Please enter a comic number");
+					}
 					
 				}
+				else 
+				{
+					
+					
+					
+				}
+				
+				
 				
 			}
 		});
@@ -99,9 +102,16 @@ public class LauncherActivity extends Activity {
 	}
 	
 	@SuppressLint("HandlerLeak")
-	private void getxkcdComic()
+	private void getxkcdComic(String userInput)
 	{
-		String baseURL = "http://xkcd.com/info.0.json";
+		String firstPart = "http://xkcd.com/";
+		
+		String middlePart = userInput;
+		
+		String lastPart = "/info.0.json";
+		
+		String baseURL = firstPart + middlePart + lastPart;
+		
 		@SuppressWarnings("unused")
 		String formattedURL;
 		try 
@@ -134,11 +144,8 @@ public class LauncherActivity extends Activity {
 					{
 						try 
 						{
-							Log.i("YAY", "Works");
-							
 							String resultsData = (String) msg.obj;
 							parseData(resultsData);
-							
 							
 						}
 						catch (Exception e)
@@ -181,9 +188,39 @@ public class LauncherActivity extends Activity {
 			
 			testText.setText(imageUrl);
 			
+
+			
+			
+			Intent secondApp = new Intent(Intent.ACTION_MAIN);
+			secondApp.addCategory(Intent.CATEGORY_LAUNCHER);
+			secondApp.setComponent(new ComponentName("com.fullsail.magee_david_secondproject", 
+					"com.fullsail.magee_david_secondproject.LaunchedActivity"));
+			secondApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			secondApp.putExtra("img", imageUrl);
+			PackageManager theManager = getPackageManager();
+			List<ResolveInfo> activities = theManager.queryIntentActivities(secondApp, 0);
+			
+			startActivity(secondApp);
+			
+			
+			
+			
+			
+			
+			boolean isIntentSafe = activities.size() > 0;
+			
+			if (isIntentSafe)
+			{
+				startActivity(secondApp);
+				
+			}
+			
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
+			testText.setText("No result found.  Try again");
 		}
 		
 	}

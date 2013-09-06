@@ -1,17 +1,53 @@
 package com.fullsail.magee_david_secondproject;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
+import android.webkit.WebView;
 
 public class LaunchedActivity extends Activity {
 
+	static Bundle retrievedData;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_launched);
+		setContentView(R.layout.launched_activity);
+		
+		
+		retrievedData = getIntent().getExtras();
+		
+		
+		
+		if (retrievedData != null)
+		{
+			String imageURL = retrievedData.getString("img");
+			WebView webview = (WebView) findViewById(R.id.webview);
+			webview.loadUrl(imageURL);
+			
+			
+			/*
+			try {
+				
+				  String imageURL = retrievedData.getString("img");
+				  ImageView comic = (ImageView)findViewById(R.id.comicImage);
+				  Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(imageURL).getContent());
+				  comic.setImageBitmap(bitmap); 
+				} catch (MalformedURLException e) {
+				  e.printStackTrace();
+				} catch (IOException e) {
+				  e.printStackTrace();
+				}
+			*/
+		}
+		else 
+		{
+			WebView webview = (WebView) findViewById(R.id.webview);
+			webview.loadUrl("http://gaeswf.appspot.com/images/404kitten.jpg");
+		}
+		
 	}
-
+	
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -19,5 +55,7 @@ public class LaunchedActivity extends Activity {
 		getMenuInflater().inflate(R.menu.launched, menu);
 		return true;
 	}
+	
+	
 
 }

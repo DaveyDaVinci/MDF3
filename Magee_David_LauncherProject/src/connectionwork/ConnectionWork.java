@@ -46,6 +46,7 @@ public class ConnectionWork {
 	}
 	
 	//Grabs the information from the URL, using a string buffer 
+	
 	public static String getURLResponse(URL url)
 	{
 		String URLResponse = "";
@@ -69,6 +70,7 @@ public class ConnectionWork {
 		} catch (Exception e)
 		{
 			Log.e("URL RESPONSE ERROR", "getURLStringResponse");
+			
 		}
 		
 		return URLResponse;
