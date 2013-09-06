@@ -1,8 +1,10 @@
 package com.fullsail.magee_david_secondproject;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.Window;
 import android.webkit.WebView;
 
 public class LaunchedActivity extends Activity {
@@ -11,12 +13,14 @@ public class LaunchedActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.launched_activity);
 		
 		
 		retrievedData = getIntent().getExtras();
 		
-		
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		
 		if (retrievedData != null)
 		{
