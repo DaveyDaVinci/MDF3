@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import connectionwork.ConnectionWork;
 
@@ -30,7 +31,7 @@ public class LauncherActivity extends Activity {
 
 	
 	static Context context;
-	
+	static TextView testText;
 	static boolean connection;
 	
 	@Override
@@ -40,35 +41,20 @@ public class LauncherActivity extends Activity {
 		
 		context = this;
 		
-		
+		testText = (TextView) findViewById(R.id.testText);
 		
 		connection = ConnectionWork.getStatusOfConnection(context);
 				
 		if (connection == true)
 		{
-			//getCardsAndValues();
+			Log.i("Connection test", "Working");
 			
 			getxkcdComic();
 		}
 		else 
 		{
 			
-			//String resultsDataString = SaveClass.readStringData(context, "saveddata");
 			
-			//String resultsDataString = SaveSingleton.readStringData(context, "saveddata");
-			
-			//if (resultsDataString != null && !resultsDataString.isEmpty() )
-			//{
-				//Toast toast = Toast.makeText(context, "NO CONNECTION AVAILABLE, DEFAULT VALUES LOADED",  Toast.LENGTH_SHORT);
-				//toast.show();
-				
-				//parseData(resultsDataString);
-			//}
-			//else
-			//{
-				//Toast secondToast = Toast.makeText(context, "NO DEFAULT VALUES TO LOAD",  Toast.LENGTH_SHORT);
-				//secondToast.show();
-			//}
 			
 		}
 		
@@ -193,7 +179,7 @@ public class LauncherActivity extends Activity {
 			
 			String imageUrl = jsonResponse.getString("img");
 			
-			
+			testText.setText(imageUrl);
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

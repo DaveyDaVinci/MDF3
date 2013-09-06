@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
 import connectionwork.ConnectionWork;
 
 //Service that handles the intent coming in.  Sets up the URL and opens the connection through ConnectionWork.  Returns and
@@ -42,7 +43,7 @@ public class URLService extends IntentService{
 		Message message = Message.obtain();
 		message.arg1 = Activity.RESULT_OK;
 		
-		
+		Log.i("URLServiceTest", "Successful");
 		
 		message.obj = ConnectionWork.getURLResponse(URLService.finishedURL);
 		try {

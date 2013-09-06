@@ -29,6 +29,7 @@
             
             <action android:name="android.intent.action.MAIN"/>
         </activity>
+        <service android:name="connectionwork.URLService"></service>
     </application>
 
 </manifest>
