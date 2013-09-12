@@ -72,16 +72,18 @@ public class GPSActivity extends Activity implements OnClickListener, LocationLi
 		
 		
 		
-		
+		//Creates an instance of the location manager
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		
 		if (locationManager == null)
 		{
+			//Makes a toast if unable to get location
 			Toast newToast = Toast.makeText(this, "Unable to get location", Toast.LENGTH_SHORT);
 			newToast.show();
 		}
 		else
 		{
+			//Sets on click listener
 			getLocationButton.setOnClickListener(this);
 		}
 	}
@@ -94,16 +96,22 @@ public class GPSActivity extends Activity implements OnClickListener, LocationLi
 	}
 
 	@Override
+	//On click methods
 	public void onClick(View v) {
+		//If get location button is clicked
 		if (v.equals(GPSActivity.getLocationButton))
 		{
+			//Creates two variables that are plugged in to the lm request
 			long time = 3*1000;
 			float speed = 0;
 			
+			//Requests location updates, passing in the provider, time, speed and context as arguments.  
 			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, time, speed, this);
 		}
+		//If its' the sensors button that's clicked
 		else if (v.equals(GPSActivity.getSensorsButton))
 		{
+			//Creates a sensor manager and individual sensors
 			sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 			
 			lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -111,6 +119,7 @@ public class GPSActivity extends Activity implements OnClickListener, LocationLi
 			temperatureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
 			humiditySensor = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
 			
+			//Checks to see if the sensors are null, or displays data, respectively
 			if (lightSensor == null)
 			{
 				lightValue.setText("Not available");
@@ -148,8 +157,11 @@ public class GPSActivity extends Activity implements OnClickListener, LocationLi
 				sensorManager.registerListener(this, humiditySensor, SensorManager.SENSOR_DELAY_UI);
 			}
 		}
+		
+		//If get battery level button is clicked
 		else if (v.equals(GPSActivity.getBatteryLevelButton))
 		{
+			//Creates and intent filter and an intent that checks for the battery changing.  
 			IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 			Intent batteryIntent = this.registerReceiver(null, intentFilter);
 			int batteryLevel = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
@@ -170,7 +182,7 @@ public class GPSActivity extends Activity implements OnClickListener, LocationLi
 		// TODO Auto-generated method stub
 		
 		
-		
+		//Creates a uri to Maps, using the user's location
 		String uri = "geo:" + String.valueOf(location.getLatitude()) + "," + 
 				String.valueOf(location.getLongitude() + "?z=17");
 		
@@ -213,6 +225,7 @@ public class GPSActivity extends Activity implements OnClickListener, LocationLi
 	public void onSensorChanged(SensorEvent event) {
 		// TODO Auto-generated method stub
 		
+		//CHanges the values of the sensors
 		if (event.sensor == lightSensor)
 		{
 			lightValue.setText(String.valueOf(event.values[0]));
@@ -231,11 +244,12 @@ public class GPSActivity extends Activity implements OnClickListener, LocationLi
 		}
 	}
 	
+	//Method constructed to change screen brightness based on battery level
 	private void changeScreenBrightness(int battLevel)
 	{
 		WindowManager.LayoutParams layout = getWindow().getAttributes();
 		
-		
+		//Checks battery level, and applies brightness settings accordingly
 		if (battLevel > 90)
 		{
 			layout.screenBrightness = .9F;
