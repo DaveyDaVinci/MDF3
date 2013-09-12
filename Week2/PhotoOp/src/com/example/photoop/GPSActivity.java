@@ -3,6 +3,8 @@ package com.example.photoop;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -11,9 +13,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,7 +35,7 @@ public class GPSActivity extends Activity implements OnClickListener, LocationLi
 	static LocationManager locationManager;
 	
 	static Button getLocationButton;
-	
+	static Button getBatteryLevelButton;
 	static Button getSensorsButton;
 	
 	static TextView lightValue;
@@ -46,10 +50,16 @@ public class GPSActivity extends Activity implements OnClickListener, LocationLi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_gps);
 		
+		
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		
 		getLocationButton = (Button) findViewById(R.id.getLocationButton);
 		
 		getSensorsButton = (Button) findViewById(R.id.getSensorsButton);
 		getSensorsButton.setOnClickListener(this);
+		
+		getBatteryLevelButton = (Button) findViewById(R.id.batteryTestButton);
+		getBatteryLevelButton.setOnClickListener(this);
 		
 		lightValue = (TextView) findViewById(R.id.lightValue);
 		airPressureValue = (TextView) findViewById(R.id.airPressureValue);
@@ -138,6 +148,20 @@ public class GPSActivity extends Activity implements OnClickListener, LocationLi
 				sensorManager.registerListener(this, humiditySensor, SensorManager.SENSOR_DELAY_UI);
 			}
 		}
+		else if (v.equals(GPSActivity.getBatteryLevelButton))
+		{
+			IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+			Intent batteryIntent = this.registerReceiver(null, intentFilter);
+			int batteryLevel = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+			int maxLevel = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+			
+			if ((batteryLevel > 0) && (maxLevel > 0))
+			{
+				int batteryPercent = (batteryLevel * 100) / maxLevel;
+				changeScreenBrightness(batteryPercent);
+			}
+			
+		}
 		
 	}
 
@@ -204,6 +228,63 @@ public class GPSActivity extends Activity implements OnClickListener, LocationLi
 		else if (event.sensor == humiditySensor)
 		{
 			humidityValue.setText(String.valueOf(event.values[0]));
+		}
+	}
+	
+	private void changeScreenBrightness(int battLevel)
+	{
+		WindowManager.LayoutParams layout = getWindow().getAttributes();
+		
+		
+		if (battLevel > 90)
+		{
+			layout.screenBrightness = .9F;
+			getWindow().setAttributes(layout);
+		}
+		else if (battLevel > 80 && battLevel <= 90)
+		{
+			layout.screenBrightness = .8F;
+			getWindow().setAttributes(layout);
+		}
+		else if (battLevel > 70 && battLevel <= 80)
+		{
+			layout.screenBrightness = .7F;
+			getWindow().setAttributes(layout);
+		}
+		else if (battLevel > 60 && battLevel <= 70)
+		{
+			layout.screenBrightness = .6F;
+			getWindow().setAttributes(layout);
+		}
+		else if (battLevel > 50 && battLevel <= 60)
+		{
+			layout.screenBrightness = .5F;
+			getWindow().setAttributes(layout);
+		}
+		else if (battLevel > 40 && battLevel <= 50)
+		{
+			layout.screenBrightness = .4F;
+			getWindow().setAttributes(layout);
+		}
+		else if (battLevel > 30 && battLevel <= 40)
+		{
+			layout.screenBrightness = .3F;
+			getWindow().setAttributes(layout);
+		}
+		else if (battLevel > 20 && battLevel <= 30)
+		{
+			layout.screenBrightness = .2F;
+			getWindow().setAttributes(layout);
+		}
+		else if (battLevel > 10 && battLevel <= 20)
+		{
+			layout.screenBrightness = .1F;
+			getWindow().setAttributes(layout);
+		}
+		else if (battLevel > 0 && battLevel <= 10)
+		{
+			layout.screenBrightness = 0F;
+			getWindow().setAttributes(layout);
 		}
 	}
 

@@ -1,3 +1,8 @@
+//David Magee
+//Week 2 project MDF3
+//Full Sail University
+//Thursday, September 12, 2013
+
 package com.example.photoop;
 
 import android.app.Activity;
@@ -20,11 +25,15 @@ public class MainPage extends Activity {
 private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 	
-	private Uri fileURI;
+	
 	
 	static Context context;
 	
 	private String videoPath;
+	
+	static VideoView videoView;
+	
+	static ImageView testView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +43,12 @@ private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 		context = this;
 		videoPath = null;
 		
+		testView = (ImageView) findViewById(R.id.imageViewTest);
+		videoView = (VideoView) findViewById(R.id.videoView);
+		testView.setVisibility(View.INVISIBLE);
+		videoView.setVisibility(View.INVISIBLE);
 		
+		//Creates a button to take a picture
 		Button photoButton = (Button) findViewById(R.id.photoButton);
 		photoButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -42,6 +56,7 @@ private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				
+				//Creates a camera intent and starts it, using the image code above
 				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 				
 				startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -49,6 +64,7 @@ private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 			}
 		});
 		
+		//Button for video
 		Button videoButton = (Button) findViewById(R.id.videoButton);
 		videoButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -56,6 +72,7 @@ private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				
+				//Creates an intent for the camera to capture video, sets quality, starts intent
 				Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 				
 				intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
@@ -65,6 +82,7 @@ private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 			}
 		});
 		
+		//Moves on to the next page, 
 		Button nextPageButton = (Button) findViewById(R.id.nextPageButton);
 		nextPageButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -84,22 +102,29 @@ private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 		return true;
 	}
 	
+	//This handles the results from the intents above.
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
+		//If an image and result is okay
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK)
 		{
-			ImageView testView = (ImageView) findViewById(R.id.imageViewTest);
+			//Sets the image in the imageview, converting the pic into a bitmap
+			
 			
 			Bitmap picBit = (Bitmap) data.getExtras().get("data");
 			
 			testView.setImageBitmap(picBit);
+			testView.setVisibility(View.VISIBLE);
+			videoView.setVisibility(View.INVISIBLE);
+			
 			
 		}
 		else if (requestCode == CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK)
 		{
-			VideoView videoView = (VideoView) findViewById(R.id.videoView);
+			
 			videoView.setVisibility(View.VISIBLE);
+			testView.setVisibility(View.INVISIBLE);
 			Uri video = data.getData();
 			videoPath = getVideoPath(video);
 			videoView.setVideoPath(videoPath);
@@ -113,7 +138,8 @@ private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 	public String getVideoPath(Uri contentUri)
 	{
 		String[] dataStore = { MediaStore.Images.Media.DATA };
-	    Cursor cursor = managedQuery(contentUri, dataStore, null, null, null);
+	    @SuppressWarnings("deprecation")
+		Cursor cursor = managedQuery(contentUri, dataStore, null, null, null);
 	    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 	    cursor.moveToFirst();
 	    return cursor.getString(column_index);
