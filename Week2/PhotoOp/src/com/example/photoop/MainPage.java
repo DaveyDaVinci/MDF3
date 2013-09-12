@@ -34,6 +34,7 @@ private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 		context = this;
 		videoPath = null;
 		
+		
 		Button photoButton = (Button) findViewById(R.id.photoButton);
 		photoButton.setOnClickListener(new View.OnClickListener() {
 			
