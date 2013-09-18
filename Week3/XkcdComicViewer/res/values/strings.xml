@@ -6,5 +6,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_comic_view">ComicView</string>
     <string name="title_activity_favorites">FavoritesActivity</string>
+    <string name="title_activity_widget">WidgetActivity</string>
 
 </resources>

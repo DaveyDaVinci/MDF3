@@ -47,6 +47,7 @@ public final class R {
         public static final int comic_view=0x7f080000;
         public static final int favorites=0x7f080001;
         public static final int main_view=0x7f080002;
+        public static final int widget=0x7f080003;
     }
     public static final class string {
         public static final int action_settings=0x7f060001;
@@ -54,6 +55,7 @@ public final class R {
         public static final int hello_world=0x7f060002;
         public static final int title_activity_comic_view=0x7f060003;
         public static final int title_activity_favorites=0x7f060004;
+        public static final int title_activity_widget=0x7f060005;
     }
     public static final class style {
         /** 

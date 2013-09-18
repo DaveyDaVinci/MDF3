@@ -37,7 +37,7 @@ public class MainView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_view);
 		
-		
+		/*
 		String derp1 = "derp1";
 		String derp2 = "derp2";
 		String derp3 = "derp3";
@@ -49,6 +49,7 @@ public class MainView extends Activity {
 		ArrayList<String> testList = savestuff.SaveClass.readArrayData(this, "favorites");
 		
 		Log.i("test", testList.get(1));
+		*/
 		
 		
 		
