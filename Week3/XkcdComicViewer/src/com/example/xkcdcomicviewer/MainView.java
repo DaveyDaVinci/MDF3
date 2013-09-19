@@ -1,3 +1,8 @@
+//David Magee
+//Full Sail University
+//MDF3 week 3 project
+//9/19/2013
+
 package com.example.xkcdcomicviewer;
 
 import java.net.MalformedURLException;

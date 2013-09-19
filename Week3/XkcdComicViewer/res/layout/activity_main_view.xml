@@ -40,7 +40,7 @@
 	        android:id="@+id/launchButton"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="Launch Second App"
+	        android:text="Launch Web View"
 	        android:layout_marginTop="360dp"
 	        android:layout_marginLeft="100dp"/>
     
