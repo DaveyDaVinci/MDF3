@@ -33,27 +33,31 @@
             android:name="com.example.xkcdcomicviewer.FavoritesActivity"
             android:label="@string/title_activity_favorites" >
         </activity>
+        
+       
 
         <service android:name="connectionwork.URLService" >
         </service>
 
+        <receiver android:name="com.example.xkcdcomicviewer.ComicWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/comic_widget" />
+        </receiver>
+
         <activity
-            android:name="com.example.xkcdcomicviewer.WidgetActivity"
-            android:label="@string/title_activity_widget" >
-        </activity>
-        
-        <receiver
-            android:name="com.example.xkcdcomicviewer.ComicWidgetProvider">
+            android:name="com.example.xkcdcomicviewer.WidgitActivity"
+            android:label="@string/title_activity_widgit" >
             
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action 
+                    android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>
-            
-            <meta-data 
-                android:name="android.appwidget.provider"
-                android:resource="@xml/comic_widget"/>
-            
-        </receiver>
+        </activity>
     </application>
 
 </manifest>

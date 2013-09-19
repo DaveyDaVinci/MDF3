@@ -4,6 +4,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,24 +39,7 @@ public class MainView extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_view);
 		
-		/*
-		String derp1 = "derp1";
-		String derp2 = "derp2";
-		String derp3 = "derp3";
-		
-		savestuff.SaveClass.storeJSONStringData(this, derp1);
-		savestuff.SaveClass.storeJSONStringData(this, derp2);
-		savestuff.SaveClass.storeJSONStringData(this, derp3);
-		
-		ArrayList<String> testList = savestuff.SaveClass.readArrayData(this, "favorites");
-		
-		Log.i("test", testList.get(1));
-		*/
-		
-		
-		
-		
-		
+		//Createsviews and buttons
 		webViewButton = (Button) findViewById(R.id.launchButton);
 		enteredNumber = (EditText) findViewById(R.id.numberBox);
 		testText = (TextView) findViewById(R.id.testText);
@@ -64,6 +49,7 @@ public class MainView extends Activity {
 			@Override
 			public void onClick(View v) {
 				
+				//Runs the get method
 				getxkcdComic(enteredNumber.getText().toString());
 				
 			}
@@ -78,6 +64,7 @@ public class MainView extends Activity {
 		
 	}
 	
+	//Creates a switch case conditional to handle whether the user selects items in the action bar
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
@@ -89,6 +76,23 @@ public class MainView extends Activity {
 				
 				
 	            return true;
+	            
+	        case R.id.webViewButton:
+	        	
+	        	//Sets a default view as the last comic viewed
+	        	
+	        	Intent webView = new Intent(this, ComicView.class);
+				
+	        	Set<String> web = saveclasses.SaveClass.readLastComicURL(this, "previouscomic");
+	        	
+	        	List<String> webList = new ArrayList<String>(web);
+	        	
+	        	webView.putExtra("img", webList.get(0));
+				
+				startActivity(webView);
+				
+				return true;
+	        	
 	        
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -96,6 +100,7 @@ public class MainView extends Activity {
 	    
 	}
 	
+	//Gets xkcd comic.  creates the URI string, then runs in through the handler to the service. 
 	@SuppressLint("HandlerLeak")
 	private void getxkcdComic(String userInput)
 	{
@@ -156,7 +161,7 @@ public class MainView extends Activity {
 			};
 			
 			
-			
+			//Gets the information back from the handler and starts the intent for the service
 			Messenger urlMessenger = new Messenger(urlRequestHandler);
 			
 			Intent startURLIntent = new Intent(this, connectionwork.URLService.class);
@@ -175,21 +180,31 @@ public class MainView extends Activity {
 	}
 	
 	
+	//Creates a JSON object out of the information that can be sorted out
 	public void parseData(String result)
 	{
 		JSONObject jsonResponse;
 		try {
 			
-			Log.i("Test", "Works");
-			
 			jsonResponse = new JSONObject(result);
 			
 			String imageUrl = jsonResponse.getString("img");
+			
+			String imageName = jsonResponse.getString("title");
+			
+			saveclasses.SaveClass.storeLastComic(this, imageUrl, imageName);
+			
+			Set<String> testSet = saveclasses.SaveClass.readLastComicURL(this, "previouscomic");
+			
+			Log.i("Test", testSet.toString());
+			
+			
 			
 			Intent webView = new Intent(this, ComicView.class);
 			webView.putExtra("img", imageUrl);
 			
 			startActivity(webView);
+			
 			
 			
 		} catch (JSONException e) {
